@@ -3,11 +3,13 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Payment from './components/Payment/Payment/Payment.vue'
 import Tweet from './components/Tweet/Tweet.vue'
+import Person from './components/Person/Persons.vue'
 </script>
 
 <template>
   <!-- <Payment /> -->
-  <Tweet />
+  <!-- <Tweet /> -->
+  <Person />
 </template>
 
 <style>
