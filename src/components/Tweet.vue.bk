@@ -1,0 +1,115 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import TweetPostForm from "./TweetPostForm.vue";
+
+const tweets = ref([
+  { id: 0, description: "Hello, world!" },
+  { id: 1, description: "Hello, Vue!" },
+  { id: 2, description: "Hello, Vue.js!" },
+]);
+const inputtingDescription = ref<string>("");
+
+const postTweet = () => {
+  const newTweet = {
+    id: tweets.value.length,
+    description: inputtingDescription.value,
+  };
+  tweets.value.push(newTweet);
+
+  console.log(inputtingDescription.value);
+};
+
+
+const deleteTweet = (id: number) => {
+  tweets.value = tweets.value.filter(tweet => tweet.id !== id);
+};
+</script>
+
+<template>
+  <div class="container">
+    <h1>Tweeter　コンポーネント分け前</h1>
+    <TweetPostForm></TweetPostForm>
+    <div class="form-container">
+      <input v-model="inputtingDescription" type="text" />
+      <button class="save-button" @click="postTweet()">post</button>
+    </div>
+    <div class="tweet-container">
+      <p v-if="tweets.length == 0">ツイートがありません。</p>
+      <ul v-else>
+        <li v-for="tweet in tweets" :key="tweet.id" class="tweet-list">
+          <span>{{ tweet.description }}</span>
+          <button class="delete-button" @click="deleteTweet(tweet.id)">delete</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: aiceblue;
+  padding: 24px 0;
+  width: 60%;
+  margin-bottom: 12px;
+  border-radius: 4px;
+}
+
+.tweet-list {
+  list-style: none;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  
+  display: flex;
+  justify-content: space-between;
+  background-color: #b0e6bd;
+  padding: 8px 20px;
+  width: 300px;
+}
+
+.save-button {
+  color: #fff;
+  font-weight: bold;
+  background-color: #79e7b4;
+  border-radius: 2px;
+  border: none;
+  width: 60px;
+  height: 22px;
+}
+
+.save-button:hover {
+  background-color: #48bf88;
+}
+
+.delete-button {
+  color: #fff;
+  font-weight: bold;
+  background-color: #eac95e;
+  border-radius: 2px;
+  border: none;
+  width: 60px;
+  height: 22px;
+}
+
+.delete-button:hover {
+  background-color: #c1a23a;
+}
+
+input {
+  margin-bottom: 16px;
+}
+
+label {
+  font-size: 20px;
+  font-weight: bold;
+}
+</style>
