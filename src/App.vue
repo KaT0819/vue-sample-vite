@@ -1,17 +1,42 @@
 <script setup lang="ts">
+import { ref, computed } from "vue";
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Payment from "./components/Payment/Payment/Payment.vue";
 import Tweet from "./components/Tweet/Tweet.vue";
 import Person from "./components/Person/Persons.vue";
 import CardList from "./components/Card/CardList.vue";
+import SecondCardList from "./components/Card/SecondCardList.vue";
+
+const isFirstTab = ref(true);
+const udateTab = (isFirst: boolean) => {
+  isFirstTab.value = isFirst;
+};
+
+const currentComponent = computed(() => {
+  return isFirstTab.value ? CardList : SecondCardList;
+});
 </script>
 
 <template>
   <!-- <Payment /> -->
   <!-- <Tweet /> -->
   <!-- <Person /> -->
-  <CardList />
+  <div>
+    <div class="tab-changer">
+      <button @click="udateTab(true)">First</button>
+      <button @click="udateTab(false)">Second</button>
+    </div>
+    <div class="tab-contents">
+      <CardList v-if="isFirstTab" />
+      <SecondCardList v-else />
+    </div>
+
+    <p>動的コンポーネント</p>
+    <div class="tab-contents">
+      <component :is="currentComponent"></component>
+    </div>
+  </div>
 </template>
 
 <style>
@@ -22,5 +47,11 @@ import CardList from "./components/Card/CardList.vue";
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.tab-contents {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
 }
 </style>
