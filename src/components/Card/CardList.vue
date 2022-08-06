@@ -1,49 +1,38 @@
 <script setup lang="ts">
-import Card from "./Card.vue";
-import Icon from "./Icon.vue";
+import { ref, computed } from "vue";
+import FirstCardList from "./FirstCardList.vue";
+import SecondCardList from "./SecondCardList.vue";
+
+const isFirstTab = ref(true);
+const udateTab = (isFirst: boolean) => {
+  isFirstTab.value = isFirst;
+};
+
+const currentComponent = computed(() => {
+  return isFirstTab.value ? FirstCardList : SecondCardList;
+});
 </script>
 
 <template>
-  <div class="container">
-    <Card title="Card 1" class="card">
-      <div class="contents">
-        コンテンツ
-        <Icon />
-      </div>
-    </Card>
+  <div class="tab-changer">
+    <button @click="udateTab(true)">First</button>
+    <button @click="udateTab(false)">Second</button>
+  </div>
+  <div class="tab-contents">
+    <FirstCardList v-if="isFirstTab" />
+    <SecondCardList v-else />
+  </div>
 
-    <Card title="Card 2" class="card">
-      <div class="contents">
-        <Icon />
-        <Icon />
-        <Icon />
-        <Icon />
-        <Icon />
-      </div>
-      <template #footer>
-        <span>フッター置き換え</span>
-        <Icon size="16px" />
-      </template>
-    </Card>
-
-    <Card title="Card 3" class="card">
-      <div class="contents">
-        <Icon />
-        <span>Rock</span>
-        <Icon />
-      </div>
-    </Card>
+  <p>動的コンポーネント</p>
+  <div class="tab-contents">
+    <component :is="currentComponent"></component>
   </div>
 </template>
 
 <style scoped>
-.container {
+.tab-contents {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.card {
-  margin-bottom: 32px;
+  justify-content: center;
+  flex-direction: row;
 }
 </style>
