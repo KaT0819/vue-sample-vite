@@ -17,8 +17,8 @@ provide(todoKey, todos);
   <!-- <Payment /> -->
   <!-- <Tweet /> -->
   <!-- <Person /> -->
-  <!-- <CardList /> -->
-  <TodoList />
+  <CardList />
+  <!-- <TodoList /> -->
 </template>
 
 <style>
