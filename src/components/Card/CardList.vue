@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import FirstCardList from "./FirstCardList.vue";
 import SecondCardList from "./SecondCardList.vue";
 import Modal from "./Modal.vue";
+import UserList from "./UserList.vue";
 
 const isFirstTab = ref<boolean>(true);
 const udateTab = (isFirst: boolean) => {
@@ -25,6 +26,8 @@ const toggleModal = () => {
 </script>
 
 <template>
+  <div class="tab-contents"><UserList></UserList></div>
+
   <div class="tab-changer">
     <button @click="udateTab(true)">First</button>
     <button @click="udateTab(false)">Second</button>
