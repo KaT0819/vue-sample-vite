@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import FirstCardList from "./FirstCardList.vue";
 import SecondCardList from "./SecondCardList.vue";
+import Modal from "./Modal.vue";
 
 const isFirstTab = ref<boolean>(true);
 const udateTab = (isFirst: boolean) => {
@@ -16,6 +17,11 @@ const isDialogOpen = ref<boolean>(false);
 const toggleDialog = () => {
   isDialogOpen.value = !isDialogOpen.value;
 };
+
+const isModalOpen = ref<boolean>(false);
+const toggleModal = () => {
+  isModalOpen.value = !isModalOpen.value;
+};
 </script>
 
 <template>
@@ -23,6 +29,7 @@ const toggleDialog = () => {
     <button @click="udateTab(true)">First</button>
     <button @click="udateTab(false)">Second</button>
     <button @click="toggleDialog()">dialog</button>
+    <button @click="toggleModal()">modal</button>
   </div>
   <div class="tab-contents">
     <FirstCardList v-if="isFirstTab" />
@@ -41,6 +48,14 @@ const toggleDialog = () => {
       <button @click="toggleDialog">Close</button>
     </dialog>
   </teleport>
+
+  <!-- <transition name="modal"> -->
+  <modal :open="isModalOpen">
+    <h1>モーダル</h1>
+    <p>This is a dialog</p>
+    <button @click="toggleModal">Close</button>
+  </modal>
+  <!-- </transition> -->
 </template>
 
 <style scoped>
@@ -48,19 +63,5 @@ const toggleDialog = () => {
   display: flex;
   justify-content: center;
   flex-direction: row;
-}
-
-.dialog {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 300px;
-  height: 150px;
-  background-color: rgba(230, 230, 200, 0.8);
-  border-color: grey;
-  border-radius: 16px;
-  align-items: center;
 }
 </style>
