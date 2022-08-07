@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, inject, DirectiveBinding, watch } from "vue";
+import axios from "axios";
+
 import { todoKey } from "../../useTodo";
 import Rating from "./Rating.vue";
 
@@ -42,23 +44,40 @@ watch(ratings, () => {
 });
 
 const onSubmit = (e: Event) => {
-  // fetchでサーバーにデータを送信する
-  fetch("https://vue-example-e7ace-default-rtdb.firebaseio.com/todos.json", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+  //   // fetchでサーバーにデータを送信する
+  //   fetch("https://vue-example-e7ace-default-rtdb.firebaseio.com/todos.json", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       content: inputTodo.value,
+  //       rating: ratings.value,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+
+  //   axios
+  axios
+    .post("https://vue-example-e7ace-default-rtdb.firebaseio.com/todos.json", {
       content: inputTodo.value,
       rating: ratings.value,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
+    })
+    .then((res) => {
+      console.log(res);
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      inputTodo.value = "";
+      ratings.value = "";
     });
 };
 </script>
