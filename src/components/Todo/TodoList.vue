@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref, inject, DirectiveBinding, watch } from "vue";
+import { ref, inject, DirectiveBinding, watch, onMounted } from "vue";
+import axios from "axios";
+
 import { todoKey } from "../../useTodo";
 import Rating from "./Rating.vue";
 
@@ -40,11 +42,76 @@ const ratings = ref<string>("");
 watch(ratings, () => {
   console.log("ratings", ratings.value);
 });
+
+const todoList = ref();
+const isLoading = ref<boolean>(false);
+const err = ref();
+
+const onSubmit = (e: Event) => {
+  //   // fetchでサーバーにデータを送信する
+  //   fetch("https://vue-example-e7ace-default-rtdb.firebaseio.com/todos.json", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       content: inputTodo.value,
+  //       rating: ratings.value,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+
+  //   axios
+  axios
+    .post("https://vue-example-e7ace-default-rtdb.firebaseio.com/todos.json", {
+      content: inputTodo.value,
+      rating: ratings.value,
+    })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      inputTodo.value = "";
+      ratings.value = "";
+    });
+};
+
+onMounted(async () => {
+  isLoading.value = true;
+
+  const response = await axios
+    .get("https://vue-example-e7ace-default-rtdb.firebaseio.com/todos.json")
+    .then((res) => {
+      console.log(res.status);
+      if (res.status !== 200) {
+        throw new Error("error");
+      }
+
+      todoList.value = res;
+      console.log(todoList.value);
+    })
+    .catch((e) => {
+      err.value = e;
+      console.log("axios catch", err);
+    });
+
+  isLoading.value = false;
+});
 </script>
 
 <template>
   <div>
     <button @click="addTodo(inputTodo)">追加</button>
+    <button @click="onSubmit">DB登録</button>
     <!-- v-focus.alert でアラート表示 -->
     <input type="text" name="todo" id="todo" v-model="inputTodo" v-focus />
     <ul :style="{ listStyle: 'none' }">
@@ -59,6 +126,11 @@ watch(ratings, () => {
   <div>
     <h2>Rating</h2>
     <Rating v-model="ratings" />
+  </div>
+  <div v-if="isLoading">ろーでぃんぐ</div>
+  <div v-else>
+    {{ todoList }}
+    {{ err }}
   </div>
 </template>
 

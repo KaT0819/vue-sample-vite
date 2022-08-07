@@ -23,4 +23,5 @@ install bootstrap
 yarn add bootstrap @popperjs/core
 # bootstrapだけだとERROR: Could not resolve "@popperjs/core"のエラーが発生
 
+yarn add axios
 ```
